@@ -54,6 +54,14 @@ Run from `app/` unless noted:
 - Build assets (prod): `make production`
 - Test suite: `pytest tests/`
 
+## Cursor Cloud
+
+Cloud Agent VMs run the native stack. PostgreSQL 16 uses peer authentication: database `eventyay-db`, role `ubuntu`. Redis is `redis://localhost/0`. `pg_trgm` is installed in `template1`, so new databases (including pytest databases created without migrations) can build trigram indexes.
+
+On boot, PostgreSQL and Redis start, `python manage.py migrate` runs, a Celery worker listens on `default,notifications,longrunning,background`, and `python manage.py runserver 0.0.0.0:8000` serves the site. Sign in at `http://127.0.0.1:8000/login/`. `python manage.py create_admin_user` prompts for an email and password. Organizers are created at `/control/organizers/add`.
+
+Asset builds from `app/` are `make npminstall`, then `python manage.py collectstatic --noinput` and `python manage.py compress --force`. Django compressor calls `npx esbuild`.
+
 ## Agent Checklist
 
 Before submitting changes:
